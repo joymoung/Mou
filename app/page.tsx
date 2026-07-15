@@ -9,6 +9,7 @@ export default function Page() {
   const t = useLocalTranslations()
   const [language, setLanguage] = useState('all')
   const [proficiency, setProficiency] = useState('fluent')
+  const [mood, setMood] = useState('professional')
   const [avatarState, setAvatarState] = useState<'THINKING'|'SPEAKING'|'IDLE'>('IDLE')
 
   // Load preferences from localStorage on mount
@@ -16,8 +17,10 @@ export default function Page() {
     try {
       const storedLang = localStorage.getItem('mou:language')
       const storedProf = localStorage.getItem('mou:proficiency')
+      const storedMood = localStorage.getItem('mou:mood')
       if (storedLang) setLanguage(storedLang)
       if (storedProf) setProficiency(storedProf)
+      if (storedMood) setMood(storedMood)
     } catch (e) {
       // ignore (server-side or disabled storage)
     }
@@ -28,20 +31,21 @@ export default function Page() {
     try {
       localStorage.setItem('mou:language', language)
       localStorage.setItem('mou:proficiency', proficiency)
+      localStorage.setItem('mou:mood', mood)
     } catch (e) {
       // ignore
     }
-  }, [language, proficiency])
+  }, [language, proficiency, mood])
 
   return (
     <div className="min-h-screen flex">
       <div className="w-80 border-r border-white/6 p-4">
-        <Sidebar language={language} setLanguage={setLanguage} proficiency={proficiency} setProficiency={setProficiency} />
+        <Sidebar language={language} setLanguage={setLanguage} proficiency={proficiency} setProficiency={setProficiency} mood={mood} setMood={setMood} />
       </div>
       <div className="flex-1 p-6">
         <div className="panel rounded-lg h-[75vh] flex">
           <div className="w-3/5 border-r border-white/6">
-            <ChatStream language={language} proficiency={proficiency} onStateChange={(s) => setAvatarState(s)} />
+            <ChatStream language={language} proficiency={proficiency} mood={mood} onStateChange={(s) => setAvatarState(s)} />
           </div>
           <div className="w-2/5 p-6 flex flex-col items-center">
             <h3 className="text-sm text-gray-300">{t('avatarSync')}</h3>

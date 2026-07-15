@@ -2,11 +2,13 @@
 import React from 'react'
 import useLocalTranslations from './useLocalTranslations'
 
-export default function Sidebar({ language, setLanguage, proficiency, setProficiency }: {
+export default function Sidebar({ language, setLanguage, proficiency, setProficiency, mood, setMood }: {
   language: string,
   setLanguage: (l: string) => void,
   proficiency: string,
-  setProficiency: (p: string) => void
+  setProficiency: (p: string) => void,
+  mood?: string,
+  setMood?: (m: string) => void
 }) {
   const t = useLocalTranslations()
 
@@ -31,6 +33,14 @@ export default function Sidebar({ language, setLanguage, proficiency, setProfici
     const val = e.target.value
     setProficiency(val)
     try { localStorage.setItem('mou:proficiency', val) } catch {}
+  }
+
+  function onMoodChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const val = e.target.value
+    if (setMood) {
+      setMood(val)
+      try { localStorage.setItem('mou:mood', val) } catch {}
+    }
   }
 
   return (
@@ -66,6 +76,19 @@ export default function Sidebar({ language, setLanguage, proficiency, setProfici
             <option value="fluent">Fluent</option>
             <option value="native">Native</option>
             <option value="expert">Expert</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <h4 className="text-xs text-gray-400">Mood</h4>
+        <div className="mt-3">
+          <select className="w-full bg-transparent border border-white/6 p-2 rounded" value={mood || 'professional'} onChange={onMoodChange}>
+            <option value="professional">Professional</option>
+            <option value="casual">Casual</option>
+            <option value="creative">Creative</option>
+            <option value="analytical">Analytical</option>
+            <option value="empathetic">Empathetic</option>
           </select>
         </div>
       </div>
