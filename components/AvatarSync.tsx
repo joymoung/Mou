@@ -1,9 +1,9 @@
 'use client'
 import { useEffect } from 'react'
-import { useTranslations } from 'next-intl'
+import useLocalTranslations from './useLocalTranslations'
 
 export default function AvatarSync({ state }: { state: 'THINKING' | 'SPEAKING' | 'IDLE' }) {
-  const t = useTranslations()
+  const t = useLocalTranslations()
   useEffect(() => {
     // side effects or analytics hooks could be placed here
   }, [state])

@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { useTranslations } from 'next-intl'
+import useLocalTranslations from './useLocalTranslations'
 
 export default function Sidebar({ language, setLanguage, proficiency, setProficiency }: {
   language: string,
@@ -8,7 +8,7 @@ export default function Sidebar({ language, setLanguage, proficiency, setProfici
   proficiency: string,
   setProficiency: (p: string) => void
 }) {
-  const t = useTranslations()
+  const t = useLocalTranslations()
 
   function onLanguageChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const val = e.target.value

@@ -1,12 +1,12 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
+import useLocalTranslations from '../components/useLocalTranslations'
 import Sidebar from '../components/Sidebar'
 import ChatStream from '../components/ChatStream'
 import AvatarSync from '../components/AvatarSync'
 
 export default function Page() {
-  const t = useTranslations()
+  const t = useLocalTranslations()
   const [language, setLanguage] = useState('all')
   const [proficiency, setProficiency] = useState('fluent')
   const [avatarState, setAvatarState] = useState<'THINKING'|'SPEAKING'|'IDLE'>('IDLE')

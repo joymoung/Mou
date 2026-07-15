@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { useTranslations } from 'next-intl'
+import useLocalTranslations from './useLocalTranslations'
 
 export default function ChatStream({ language, proficiency, onStateChange }: { language: string, proficiency: string, onStateChange?: (s: 'THINKING'|'SPEAKING'|'IDLE') => void }) {
-  const t = useTranslations()
+  const t = useLocalTranslations()
   const [messages, setMessages] = useState<Array<{id:string, text:string}>>([
     { id: 'm1', text: '> Executive summary will appear here.\n\n[STATE: IDLE]'}
   ])
