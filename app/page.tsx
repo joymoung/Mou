@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
 import ChatStream from '../components/ChatStream'
 import AvatarSync from '../components/AvatarSync'
@@ -8,6 +8,28 @@ export default function Page() {
   const [language, setLanguage] = useState('all')
   const [proficiency, setProficiency] = useState('fluent')
   const [avatarState, setAvatarState] = useState<'THINKING'|'SPEAKING'|'IDLE'>('IDLE')
+
+  // Load preferences from localStorage on mount
+  useEffect(() => {
+    try {
+      const storedLang = localStorage.getItem('mou:language')
+      const storedProf = localStorage.getItem('mou:proficiency')
+      if (storedLang) setLanguage(storedLang)
+      if (storedProf) setProficiency(storedProf)
+    } catch (e) {
+      // ignore (server-side or disabled storage)
+    }
+  }, [])
+
+  // Persist preferences when they change
+  useEffect(() => {
+    try {
+      localStorage.setItem('mou:language', language)
+      localStorage.setItem('mou:proficiency', proficiency)
+    } catch (e) {
+      // ignore
+    }
+  }, [language, proficiency])
 
   return (
     <div className="min-h-screen flex">
