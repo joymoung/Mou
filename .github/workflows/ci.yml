@@ -13,16 +13,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-          cache: 'npm'
-
-      - name: Verify Node & npm
+      - name: Ensure Node.js 18 (fallback installer)
         run: |
+          if ! command -v node >/dev/null 2>&1; then
+            echo "Node not found — installing Node 18 from NodeSource"
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+          else
+            echo "Node already installed"
+          fi
           node --version
           npm --version
+        shell: bash
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
