@@ -28,14 +28,17 @@ export async function POST(req: Request) {
     const textPrompt = `${systemPrompt}\n\n[USER META] Language: ${language} | Proficiency: ${proficiency}\n\nUser: ${userContent}`
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateText?key=${process.env.GOOGLE_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:streamGenerateContent?key=${process.env.GOOGLE_API_KEY}&alt=sse`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: { text: textPrompt },
-          temperature: 0.2,
-          candidateCount: 1
+          contents: [{ parts: [{ text: textPrompt }] }],
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 1024,
+            candidateCount: 1
+          }
         })
       }
     )
@@ -45,19 +48,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Provider error', details: t }, { status: res.status })
     }
 
-    const data = await res.json()
-    // Try to extract generated text from common places
-    let text = ''
-    if (data && data.candidates && data.candidates[0]) {
-      // new GA API may put the text in candidates[0].output or candidates[0].content
-      text = data.candidates[0].output || data.candidates[0].content || JSON.stringify(data.candidates[0])
-    } else if (data?.output?.[0]?.content) {
-      text = data.output[0].content
-    } else {
-      text = JSON.stringify(data)
+    // Stream the response back to client
+    const body_stream = res.body
+    if (!body_stream) {
+      return NextResponse.json({ error: 'No stream from provider' }, { status: 500 })
     }
 
-    return NextResponse.json({ text })
+    return new NextResponse(body_stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache, no-transform'
+      }
+    })
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 })
   }

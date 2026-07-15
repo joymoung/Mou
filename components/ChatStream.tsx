@@ -10,6 +10,7 @@ export default function ChatStream({ language, proficiency, onStateChange }: { l
     { id: 'm1', text: '> Executive summary will appear here.\n\n[STATE: IDLE]'}
   ])
   const [avatarState, setAvatarState] = useState<'THINKING'|'SPEAKING'|'IDLE'>('IDLE')
+  const [input, setInput] = useState('')
   const streamIdRef = useRef<string | null>(null)
 
   useEffect(() => {
@@ -38,17 +39,23 @@ export default function ChatStream({ language, proficiency, onStateChange }: { l
   }
 
   async function sendPrompt() {
+    if (!input.trim()) return
+    
+    // Add user message to chat
+    setMessages(prev => [...prev, { id: `m-user-${Date.now()}`, text: `**You:** ${input}` }])
+    
     // create a streaming message slot
     const sid = `s${Date.now()}`
     streamIdRef.current = sid
     setMessages(prev => [...prev, { id: sid, text: '' }])
     updateState('THINKING')
+    setInput('')
 
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: 'Hello MOU', language, proficiency })
+        body: JSON.stringify({ prompt: input || 'Hello MOU', language, proficiency })
       })
 
       if (!res.ok) {
@@ -93,8 +100,18 @@ export default function ChatStream({ language, proficiency, onStateChange }: { l
           </div>
         ))}
       </div>
-      <div className="p-4 border-t border-white/6 flex items-center gap-3">
-        <button className="px-4 py-2 rounded bg-accent text-black" onClick={sendPrompt}>{t('sendDemo')}</button>
+      <div className="p-4 border-t border-white/6">
+        <div className="flex items-center gap-3 mb-3">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && sendPrompt()}
+            placeholder={t('sendDemo') || 'Ask MOU...'}
+            className="flex-1 bg-transparent border border-white/6 p-2 rounded text-white placeholder-gray-500"
+          />
+          <button className="px-4 py-2 rounded bg-accent text-black" onClick={sendPrompt}>{t('sendDemo')}</button>
+        </div>
         <div className="text-sm text-gray-400">{`${t('language')}: ${language} • ${t('proficiency')}: ${proficiency}`}</div>
       </div>
     </div>
