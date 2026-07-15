@@ -17,7 +17,13 @@ MOU (Modular, Observant, Unified) Nexus Core is a proprietary AI intelligence en
 - Added user input field
 - Improved input validation
 
+### 🚀 Server Status
+- ✅ Development server running on `http://localhost:3000`
+- ✅ Mock chat endpoint available for testing
+- ✅ Real chat endpoint ready (requires GOOGLE_API_KEY)
+
 **[See CHANGELOG.md for detailed updates](./CHANGELOG.md)**
+**[See TESTING.md for API testing guide](./TESTING.md)**
 
 ## Core Capabilities
 
