@@ -1,10 +1,12 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import Sidebar from '../components/Sidebar'
 import ChatStream from '../components/ChatStream'
 import AvatarSync from '../components/AvatarSync'
 
 export default function Page() {
+  const t = useTranslations()
   const [language, setLanguage] = useState('all')
   const [proficiency, setProficiency] = useState('fluent')
   const [avatarState, setAvatarState] = useState<'THINKING'|'SPEAKING'|'IDLE'>('IDLE')
@@ -42,7 +44,7 @@ export default function Page() {
             <ChatStream language={language} proficiency={proficiency} onStateChange={(s) => setAvatarState(s)} />
           </div>
           <div className="w-2/5 p-6 flex flex-col items-center">
-            <h3 className="text-sm text-gray-300">Avatar Sync</h3>
+            <h3 className="text-sm text-gray-300">{t('avatarSync')}</h3>
             <AvatarSync state={avatarState} />
           </div>
         </div>

@@ -1,7 +1,9 @@
 'use client'
 import { useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 
 export default function AvatarSync({ state }: { state: 'THINKING' | 'SPEAKING' | 'IDLE' }) {
+  const t = useTranslations()
   useEffect(() => {
     // side effects or analytics hooks could be placed here
   }, [state])
@@ -10,7 +12,7 @@ export default function AvatarSync({ state }: { state: 'THINKING' | 'SPEAKING' |
   return (
     <div className="flex flex-col items-center p-4">
       <div className={cls} aria-hidden />
-      <div className="mt-3 text-center text-sm text-gray-300">State: {state}</div>
+      <div className="mt-3 text-center text-sm text-gray-300">{t('state')}: {state}</div>
     </div>
   )
 }
