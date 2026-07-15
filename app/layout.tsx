@@ -1,7 +1,8 @@
 import './globals.css'
 import Footer from '../components/Footer'
-import NextIntlProvider from 'next-intl/dist/src/react-server/NextIntlClientProvider'
 import { headers } from 'next/headers'
+import './globals.css'
+import Footer from '../components/Footer'
 
 export const metadata = {
   title: 'MOU Nexus Core',
@@ -16,25 +17,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const supported = ['en', 'es']
   const locale = supported.includes(primary) ? primary : 'en'
 
-  // Load messages dynamically for the detected locale
-  let messages = {}
+  // Load messages dynamically for the detected locale (kept for future i18n)
   try {
     // dynamic import must use a literal-like path; this works in Next.js when files exist
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    messages = (await import(`../messages/${locale}.json`)).default
+    await import(`../messages/${locale}.json`)
   } catch (e) {
-    messages = (await import('../messages/en.json')).default
+    await import('../messages/en.json')
   }
 
   return (
     <html lang={locale} className="dark">
       <body>
-        <NextIntlProvider locale={locale} messages={messages}>
-          <div className="min-h-screen flex flex-col">
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </NextIntlProvider>
+        <div className="min-h-screen flex flex-col">
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   )
