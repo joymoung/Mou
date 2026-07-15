@@ -44,3 +44,10 @@ jobs:
         env:
           CI: true
         run: npm run build
+
+      - name: Run production server and test mock endpoint
+        run: |
+          nohup npm run start -- -p 3000 > server.log 2>&1 &
+          sleep 5
+          curl -f --max-time 10 http://127.0.0.1:3000/api/mock-chat || (cat server.log; exit 1)
+        shell: bash
