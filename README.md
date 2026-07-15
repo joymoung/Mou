@@ -43,11 +43,15 @@ Optimization Checklist:
 
 [STATE: IDLE]
 
-When the client receives chunks containing [STATE: THINKING] / [STATE: SPEAKING] / [STATE: IDLE] it should update the Avatar state and hide the tags from the rendered Markdown. To test locally:
+When the client receives chunks containing [STATE: THINKING] / [STATE: SPEAKING] / [STATE: IDLE] it should update the Avatar state and hide the tags from the rendered Markdown. To test locally against the real model:
 
 curl -N -X POST http://localhost:3000/api/chat -H "Content-Type: application/json" -d '{"prompt":"Hello MOU","language":"en","proficiency":"fluent"}'
 
-Expect the stream to include the three state tags and Markdown content as shown above. If the tags are missing, verify GOOGLE_API_KEY and that the model/system prompt are correctly set in app/api/chat/route.ts.
+For development without Gemini credentials, a mock streaming endpoint is provided. Use the mock endpoint to verify AvatarSync and streaming client behavior:
+
+curl -N -X POST http://localhost:3000/api/mock-chat -H "Content-Type: application/json" -d '{}' 
+
+Expect the stream to include the three state tags and Markdown content as shown above. If the tags are missing for the real model, verify GOOGLE_API_KEY and that the model/system prompt are correctly set in app/api/chat/route.ts.
 
 Local development
 
