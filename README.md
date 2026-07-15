@@ -14,6 +14,10 @@ Project: Startup scaffold for a Next.js 14 app using Vercel AI SDK, Tailwind CSS
 
 Engineer: Jaw Ae Maung
 
+Language Proficiency Support
+
+MOU Nexus Core supports configurable language preferences and proficiency levels. Select a language (or "All Languages") and a proficiency tier (Beginner, Conversational, Fluent, Native, Expert) to instruct MOU how to interpret, translate, and respond. Proficiency settings influence tone, idiomatic expression, and the handling of ambiguous dictation.
+
 © 2026 Jaw Ae Maung. All rights reserved.
 
 Local development
