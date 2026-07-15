@@ -20,6 +20,35 @@ MOU Nexus Core supports configurable language preferences and proficiency levels
 
 © 2026 Jaw Ae Maung. All rights reserved.
 
+Streamed response example
+
+The backend streams tokenized output including explicit state tags which the frontend removes from the visible feed and uses to animate the Avatar Sync.
+
+Example raw stream (SSE / chunked):
+
+[STATE: THINKING]
+[STATE: SPEAKING]
+> Executive Summary
+>
+> MOU synthesized the prompt and recommends a targeted optimization path.
+
+| Metric | Value |
+|---|---|
+| Confidence | 0.93 |
+| Latency | 120ms |
+
+Optimization Checklist:
+- [x] Validate input
+- [ ] Run batch normalization
+
+[STATE: IDLE]
+
+When the client receives chunks containing [STATE: THINKING] / [STATE: SPEAKING] / [STATE: IDLE] it should update the Avatar state and hide the tags from the rendered Markdown. To test locally:
+
+curl -N -X POST http://localhost:3000/api/chat -H "Content-Type: application/json" -d '{"prompt":"Hello MOU","language":"en","proficiency":"fluent"}'
+
+Expect the stream to include the three state tags and Markdown content as shown above. If the tags are missing, verify GOOGLE_API_KEY and that the model/system prompt are correctly set in app/api/chat/route.ts.
+
 Local development
 
 1. Install Node.js (18.x or later) and npm on your machine: https://nodejs.org/
