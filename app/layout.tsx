@@ -1,8 +1,6 @@
 import './globals.css'
 import Footer from '../components/Footer'
 import { headers } from 'next/headers'
-import './globals.css'
-import Footer from '../components/Footer'
 
 export const metadata = {
   title: 'MOU Nexus Core',
