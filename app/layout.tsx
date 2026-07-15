@@ -1,6 +1,6 @@
 import './globals.css'
 import Footer from '../components/Footer'
-import { NextIntlProvider } from 'next-intl'
+import NextIntlClientProvider from 'next-intl/dist/src/react-server/NextIntlClientProvider'
 import { headers } from 'next/headers'
 
 export const metadata = {
